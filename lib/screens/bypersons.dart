@@ -3,7 +3,8 @@ import 'package:evpsup/models/task.dart';
 import 'package:flutter/material.dart';
 
 class ByPersons extends StatefulWidget {
-  const ByPersons({Key? key, required this.tasks, required this.persons}) : super(key: key);
+  const ByPersons({Key? key, required this.tasks, required this.persons})
+      : super(key: key);
   final List<Task> tasks;
   final List<Person> persons;
 
@@ -30,24 +31,13 @@ class _ByPersonsState extends State<ByPersons>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue,
       appBar: AppBar(),
       body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: widget.persons.map((e) => Card(
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(e.name),
-                  //...widget.tasks.map((e) => Text(e.text)).toList()
-                ],
-              ),
-            ),
-          )).toList()
-        ),
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: widget.persons.map((p) => p.card()).toList()),
       ),
     );
   }

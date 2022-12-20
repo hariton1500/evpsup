@@ -25,16 +25,16 @@ final dbtasks = {
   1: {
     'text': 'нет ARPa',
     'type': TaskTypes.fix,
-    'address': 'Металистов пл.	17	1в'
+    'address': 'Металистов пл. 17 1в'
   },
   2: {
     'text': 'нет ARPa',
     'type': TaskTypes.fix,
-    'address': 'Интернациональный пер.	12	дом'
+    'address': 'Интернациональный пер. 12 дом'
   },
   3: {
     'text': '+79787994062 нет арпа',
     'type': TaskTypes.fix,
-    'address': 'Революции ул.	39	8'
+    'address': 'Революции ул. 39 8'
   }
 };
