@@ -1,4 +1,10 @@
+import 'package:evpsup/models/person.dart';
+import 'package:evpsup/models/task.dart';
+import 'package:evpsup/screens/bypersons.dart';
+import 'package:evpsup/screens/raspredelenie.dart';
 import 'package:flutter/material.dart';
+
+import 'package:evpsup/db/persons.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,13 +36,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  List<Task> tasks = dbtasks.values.map((e) {
+    print(e);
+    return Task(text: e['text'].toString(), type: e['type'] as TaskTypes, address: e['address'].toString());
+  }).toList();
+
+  List<Person> persons = dbpersons.values.map((e) => Person(name: e['name'].toString())).toList();
+  
 
   @override
   Widget build(BuildContext context) {
@@ -44,25 +51,26 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(top: 10, left: 10),
+            child: ElevatedButton.icon(onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => ByPersons(tasks: tasks, persons: persons)));
+            }, icon: const Icon(Icons.person_search), label: const Text('По сотрудникам')),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10, left: 10),
+            child: ElevatedButton.icon(onPressed: () {}, icon: const Icon(Icons.task), label: const Text('По задачам')),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10, left: 10),
+            child: ElevatedButton.icon(onPressed: () {Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Raspred()));}, icon: const Icon(Icons.add_task), label: const Text('Распределение')),
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
