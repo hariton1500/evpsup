@@ -1,8 +1,10 @@
 import 'package:evpsup/models/person.dart';
+import 'package:evpsup/models/settings.dart';
 import 'package:evpsup/models/task.dart';
 import 'package:evpsup/screens/bypersons.dart';
 import 'package:evpsup/screens/bytasks.dart';
 import 'package:evpsup/screens/raspredelenie.dart';
+import 'package:evpsup/screens/setup.dart';
 import 'package:flutter/material.dart';
 
 import 'package:evpsup/db/persons.dart';
@@ -38,6 +40,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Settings settings = Settings();
+
   List<Task> tasks = dbtasks.values.map((e) {
     //print(e);
     return Task(
@@ -52,8 +56,22 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(
+                      builder: (context) => Setup(settings: settings)))
+                  .then((value) {
+                //if (value != null) settings.accessCode = value;
+              });
+            },
+          )
+        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
