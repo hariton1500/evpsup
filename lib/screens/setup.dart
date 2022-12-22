@@ -46,7 +46,7 @@ class _SetupState extends State<Setup> {
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pop(widget.settings);
                 },
                 icon: const Icon(Icons.save),
                 label: const Text('Сохранить код доступа')),

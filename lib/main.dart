@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:evpsup/models/person.dart';
 import 'package:evpsup/models/settings.dart';
 import 'package:evpsup/models/task.dart';
@@ -8,6 +10,7 @@ import 'package:evpsup/screens/setup.dart';
 import 'package:flutter/material.dart';
 
 import 'package:evpsup/db/persons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -40,7 +43,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Settings settings = Settings();
+  Settings settings = Settings('');
+  SharedPreferences? sharedPreferences;
+
+  @override
+  void initState() {
+    loadSharedPrefs();
+    super.initState();
+  }
 
   List<Task> tasks = dbtasks.values.map((e) {
     //print(e);
@@ -64,10 +74,15 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: const Icon(Icons.settings),
             onPressed: () {
               Navigator.of(context)
-                  .push(MaterialPageRoute(
+                  .push<Settings>(MaterialPageRoute(
                       builder: (context) => Setup(settings: settings)))
                   .then((value) {
-                //if (value != null) settings.accessCode = value;
+                if (value != null) {
+                  settings = value;
+                  print('saving settings=${settings.toJson()}');
+                  sharedPreferences?.setString(
+                      'settings', jsonEncode(settings.toJson()));
+                }
               });
             },
           )
@@ -115,5 +130,17 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
     );
+  }
+
+  void loadSharedPrefs() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences != null) {
+      String jsonString = sharedPreferences?.getString('settings') ?? '';
+      print(jsonString);
+      settings = jsonString != ''
+          ? Settings.fromJson(jsonDecode(jsonString))
+          : Settings('');
+    }
+    //setState(() {});
   }
 }
