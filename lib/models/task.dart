@@ -4,12 +4,51 @@ import 'package:flutter/material.dart';
 enum TaskTypes { fix, connection, reconstruction }
 
 class Task {
-  TaskTypes type;
-  String text;
-  String address;
+  late int id;
+  late int abonId;
+  late int vlan;
+  late TaskTypes type;
+  late String text;
+  late String address;
+  late DateTime creationDate;
+  List<String> comments = [];
   List<Person> persons = [];
 
-  Task({required this.type, required this.text, required this.address});
+  Task(
+      {required this.id,
+      required this.abonId,
+      required this.vlan,
+      required this.type,
+      required this.text,
+      required this.address,
+      required this.creationDate});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'abonId': abonId,
+      'vlan': vlan,
+      'type': type.name,
+      'text': text,
+      'address': address,
+      'creationDate': creationDate,
+      'comments': comments,
+      'persons': persons
+    };
+  }
+
+  Task.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    abonId = json['abonId'];
+    vlan = json['vlan'];
+    type = json['type'];
+    text = json['text'];
+    address = json['address'];
+    creationDate = json['creationDate'];
+    comments = List.from(json['comments'] as List<String>);
+    persons = List.from(json['persons'] as List<Person>);
+  }
+
   Card card() {
     return Card(
       color: Colors.cyan,

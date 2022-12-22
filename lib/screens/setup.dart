@@ -42,6 +42,27 @@ class _SetupState extends State<Setup> {
               ),
             ),
           ),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Card(
+              color: Colors.blue,
+              child: Text('Адрес сервера:'),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+              color: Colors.blue,
+              child: TextField(
+                //keyboardType: const TextInputType.numberWithOptions(),
+                //obscureText: true,
+                controller: TextEditingController(text: widget.settings.url),
+                onChanged: (text) {
+                  widget.settings.url = text;
+                },
+              ),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton.icon(
@@ -49,7 +70,7 @@ class _SetupState extends State<Setup> {
                   Navigator.of(context).pop(widget.settings);
                 },
                 icon: const Icon(Icons.save),
-                label: const Text('Сохранить код доступа')),
+                label: const Text('Сохранить')),
           )
         ],
       ),

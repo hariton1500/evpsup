@@ -9,7 +9,15 @@ class AddTask extends StatefulWidget {
 }
 
 class _AddTaskState extends State<AddTask> {
-  Task task = Task(type: TaskTypes.reconstruction, text: '', address: '');
+  Task task = Task(
+    type: TaskTypes.reconstruction,
+    text: '',
+    address: '',
+    abonId: -1,
+    creationDate: DateTime.now(),
+    id: DateTime.now().millisecondsSinceEpoch,
+    vlan: -1,
+  );
 
   @override
   Widget build(BuildContext context) {

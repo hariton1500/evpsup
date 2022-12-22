@@ -57,7 +57,11 @@ class _MyHomePageState extends State<MyHomePage> {
     return Task(
         text: e['text'].toString(),
         type: e['type'] as TaskTypes,
-        address: e['address'].toString());
+        address: e['address'].toString(),
+        abonId: -1,
+        id: dbtasks.values.toList().indexOf(e),
+        creationDate: DateTime.now().subtract(const Duration(days: 1)),
+        vlan: 4020);
   }).toList();
 
   List<Person> persons =
@@ -79,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   .then((value) {
                 if (value != null) {
                   settings = value;
-                  print('saving settings=${settings.toJson()}');
+                  //print('saving settings=${settings.toJson()}');
                   sharedPreferences?.setString(
                       'settings', jsonEncode(settings.toJson()));
                 }
@@ -120,6 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => Raspred(
+                            settings: settings,
                             persons: persons,
                             tasks: tasks,
                           )));
@@ -136,7 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
     sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences != null) {
       String jsonString = sharedPreferences?.getString('settings') ?? '';
-      print(jsonString);
+      //print(jsonString);
       settings = jsonString != ''
           ? Settings.fromJson(jsonDecode(jsonString))
           : Settings('');
