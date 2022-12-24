@@ -63,6 +63,45 @@ class _SetupState extends State<Setup> {
               ),
             ),
           ),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Card(
+              color: Colors.blue,
+              child: Text('Логин:'),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+              color: Colors.blue,
+              child: TextField(
+                controller: TextEditingController(text: widget.settings.login),
+                onChanged: (text) {
+                  widget.settings.login = text;
+                },
+              ),
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Card(
+              color: Colors.blue,
+              child: Text('Пароль:'),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+              color: Colors.blue,
+              child: TextField(
+                obscureText: true,
+                controller: TextEditingController(text: widget.settings.password),
+                onChanged: (text) {
+                  widget.settings.password = text;
+                },
+              ),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton.icon(

@@ -43,7 +43,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Settings settings = Settings('');
+  Settings settings = Settings('', '', '', '');
   SharedPreferences? sharedPreferences;
 
   @override
@@ -144,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
       //print(jsonString);
       settings = jsonString != ''
           ? Settings.fromJson(jsonDecode(jsonString))
-          : Settings('');
+          : Settings('', '', '', '');
     }
     //setState(() {});
   }

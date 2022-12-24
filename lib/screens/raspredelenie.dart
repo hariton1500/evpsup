@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:crypto/crypto.dart';
 import 'package:evpsup/helpers/enums.dart';
 import 'package:evpsup/models/person.dart';
 import 'package:evpsup/models/settings.dart';
@@ -103,7 +105,7 @@ class _RaspredState extends State<Raspred> {
 
   Future<void> loadTasks() async {
     try {
-      var response = await http.get(Uri.parse(widget.settings.url));
+      var response = await http.get(Uri.parse(widget.settings.url), headers: {'login': widget.settings.login, 'password': widget.settings.password});
       print(response.body);
       setState(() {
         status = NetworkStatus.done;
