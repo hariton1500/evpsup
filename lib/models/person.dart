@@ -1,11 +1,24 @@
+import 'dart:convert';
+
 import 'package:evpsup/models/task.dart';
 import 'package:flutter/material.dart';
 
 class Person {
-  String name;
+  late String name;
   List<Task> tasks = [];
 
   Person({required this.name});
+
+  String toJson() {
+    return json.encode({'name': name});
+  }
+
+  Person.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    if (json.containsKey('tasks')) {
+      tasks = List<Task>.from(json['tasks'] as List<Task>);
+    }
+  }
 
   Card card() {
     return Card(

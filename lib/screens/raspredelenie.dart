@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:crypto/crypto.dart';
 import 'package:evpsup/helpers/enums.dart';
 import 'package:evpsup/models/person.dart';
 import 'package:evpsup/models/settings.dart';
@@ -27,6 +26,8 @@ class Raspred extends StatefulWidget {
 class _RaspredState extends State<Raspred> {
   NetworkStatus status = NetworkStatus.loading;
 
+  Map<Person, Task> newOrders = {};
+
   @override
   void initState() {
     loadTasks();
@@ -39,6 +40,17 @@ class _RaspredState extends State<Raspred> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         title: const Text('Распределение задач между сотрудниками'),
+        actions: [
+          newOrders.isNotEmpty ? ElevatedButton.icon(onPressed: () {
+            sendNewOrders().then((isOk) {
+              if (isOk) {
+                setState(() {
+                  newOrders.clear();
+                });
+              }
+            });
+          }, icon: const Icon(Icons.save), label: Text(newOrders.entries.length.toString())) : Container()
+        ],
       ),
       body: status == NetworkStatus.done
           ? Wrap(
@@ -54,8 +66,8 @@ class _RaspredState extends State<Raspred> {
                         (p) => DragTarget<Task>(
                           onAccept: (t) {
                             setState(() {
-                              if (!p.tasks.contains(t)) p.tasks.add(t);
-                              if (!t.persons.contains(p)) t.persons.add(p);
+                              if (!p.tasks.contains(t)) {p.tasks.add(t); newOrders[p] = t;}
+                              if (!t.persons.contains(p)) {t.persons.add(p);}
                             });
                           },
                           builder: (context, candidateData, rejectedData) {
@@ -73,7 +85,7 @@ class _RaspredState extends State<Raspred> {
                           (t) => DragTarget<Person>(
                             onAccept: (p) {
                               setState(() {
-                                if (!p.tasks.contains(t)) p.tasks.add(t);
+                                if (!p.tasks.contains(t)) {p.tasks.add(t); newOrders[p] = t;}
                                 if (!t.persons.contains(p)) t.persons.add(p);
                               });
                             },
@@ -105,7 +117,7 @@ class _RaspredState extends State<Raspred> {
 
   Future<void> loadTasks() async {
     try {
-      var response = await http.get(Uri.parse(widget.settings.url), headers: {'login': widget.settings.login, 'password': widget.settings.password});
+      var response = await http.get(Uri.parse('${widget.settings.url}/gettasks'), headers: {'login': widget.settings.login, 'password': widget.settings.password});
       print(response.body);
       setState(() {
         status = NetworkStatus.done;
@@ -119,6 +131,24 @@ class _RaspredState extends State<Raspred> {
       });
     } catch (e) {
       print(e);
+    }
+  }
+  
+  Future<bool> sendNewOrders() async {
+    try {
+      String data = jsonEncode({'persons': newOrders.keys.toList(), 'tasks': newOrders.values.toList()});
+      print(data);
+      print(json.decode(data));
+      var response = await http.post(Uri.parse('${widget.settings.url}/neworders'), body: data);
+      if (response.body == 'added new orders.') {
+        return true;
+      } else {print('bad body text') ;return false;}
+    } on SocketException {
+      print('socket error');
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
     }
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:evpsup/models/person.dart';
 import 'package:flutter/material.dart';
 
@@ -23,18 +25,18 @@ class Task {
       required this.address,
       required this.creationDate});
 
-  Map<String, dynamic> toJson() {
-    return {
+  String toJson() {
+    return json.encode({
       'id': id,
       'abonId': abonId,
       'vlan': vlan,
       'type': type.name,
       'text': text,
       'address': address,
-      'creationDate': creationDate,
+      'creationDate': creationDate.toString(),
       'comments': comments,
-      'persons': persons
-    };
+      //'persons': persons
+    });
   }
 
   Task.fromJson(Map<String, dynamic> json) {
@@ -44,7 +46,7 @@ class Task {
     type = json['type'];
     text = json['text'];
     address = json['address'];
-    creationDate = json['creationDate'];
+    creationDate = DateTime.parse(json['creationDate']);
     comments = List.from(json['comments'] as List<String>);
     persons = List.from(json['persons'] as List<Person>);
   }
